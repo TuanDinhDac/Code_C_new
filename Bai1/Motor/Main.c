@@ -1,6 +1,7 @@
 #include "Main.h"
 #include "MainControl.h"
 #include "AppFailDiag.h"
+#include "AppAdData.h"
 
 void Main_Init(void)
 {
@@ -30,4 +31,7 @@ void Main_Loop(void)
     {
         HandleMotorFault(AppFailDiag_GetFaultCode());
     }
+
+    AppAdData_Update(); 
+    AppAdData_t data = AppAdData_GetData();
 }
