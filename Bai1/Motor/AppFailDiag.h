@@ -9,17 +9,12 @@ typedef enum
     FAULT_NONE = 0,
     FAULT_OVERCURRENT,
     FAULT_OVERVOLTAGE,
-    FAULT_MOTOR_NOT_SPINNING
+    FAULT_UNDERVOLTAGE
 } FaultCode_t;
 
 void AppFailDiag_Init(void);
-void AppFailDiag_Update(uint16_t current_mA,
-                        uint16_t voltage_mV,
-                        float targetSpeedRPM,
-                        float actualSpeedRPM);
-
+void AppFailDiag_Update(uint16_t current_mA, uint16_t voltage_mV);
 bool AppFailDiag_HasFault(void);
 FaultCode_t AppFailDiag_GetFaultCode(void);
 
 #endif // APPFAILDIAG_H
-

@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/user/OneDrive/Desktop/code_c/LaptrinhC/Bai1",
-      "program": "c:/Users/user/OneDrive/Desktop/code_c/LaptrinhC/Bai1/build/Debug/outDebug",
+      "cwd": "c:/Users/user/OneDrive/Desktop/code_c/LaptrinhC/Bai1/Motor",
+      "program": "c:/Users/user/OneDrive/Desktop/code_c/LaptrinhC/Bai1/Motor/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
