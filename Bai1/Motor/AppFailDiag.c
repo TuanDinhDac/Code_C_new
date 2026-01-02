@@ -6,12 +6,23 @@ static const uint16_t CURRENT_LIMIT = 5000;     // mA
 static const uint16_t VOLTAGE_LIMIT = 13000;    // mV
 static const uint16_t UNDERVOLTAGE_LIMIT = 9000; // mV  <-- thêm ngưỡng điện áp thấp
 
+// Ngưỡng phát hiện motor không quay
+static const float SPEED_MIN_RPM = 50.0f;       // tốc độ gần như đứng yên
+static const float TARGET_MIN_RPM = 200.0f;     // tốc độ đặt đủ lớn để motor phải quay
+static const uint8_t STALL_DEBOUNCE = 10;       // số chu kỳ liên tiếp (ví dụ 10 × 10ms = 100ms)
+
+static uint8_t stallCounter = 0;
+
 void AppFailDiag_Init(void)
 {
     faultCode = FAULT_NONE;
+    stallCounter = 0;
 }
 
-void AppFailDiag_Update(uint16_t current_mA, uint16_t voltage_mV)
+void AppFailDiag_Update(uint16_t current_mA,
+                        uint16_t voltage_mV,
+                        float targetSpeedRPM,
+                        float actualSpeedRPM)
 {
     faultCode = FAULT_NONE;
 
@@ -34,6 +45,24 @@ void AppFailDiag_Update(uint16_t current_mA, uint16_t voltage_mV)
     {
         faultCode = FAULT_UNDERVOLTAGE;
         return;
+    // 3. Motor không quay (Stall)
+    bool tryingToSpin = (targetSpeedRPM > TARGET_MIN_RPM);
+    bool notMoving    = (actualSpeedRPM < SPEED_MIN_RPM);
+
+    if (tryingToSpin && notMoving)
+    {
+        if (stallCounter < STALL_DEBOUNCE)
+            stallCounter++;
+
+        if (stallCounter >= STALL_DEBOUNCE)
+        {
+            faultCode = FAULT_MOTOR_NOT_SPINNING;
+            return;
+        }
+    }
+    else
+    {
+        stallCounter = 0;
     }
 }
 
